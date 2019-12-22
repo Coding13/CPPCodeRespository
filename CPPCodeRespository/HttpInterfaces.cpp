@@ -78,8 +78,14 @@ void __stdcall SendErrorResponse(mg_connection *connection, int errCode, const c
 		return;
 	}
 	m_loggerInterface->info("errCode:{},errMsg:{}", errCode, errMsg);
-	mg_http_send_error(connection, errCode, errMsg);
-	connection->flags |= MG_F_SEND_AND_CLOSE;
+	int len = strlen(errMsg);
+	char* resp = new char[len + 1];
+	strncpy(resp, errMsg, len + 1);
+	resp[len] = '\0';
+
+	mg_send_head(connection, 200, (strlen(resp) + 1), "Access-Control-Allow-Origin: *\r\nContent-Type:text/plain;charset=utf-8\r\nConnection: close");//"Access-Control-Allow-Origin: *" \r\nConnection: close
+	mg_send(connection, resp, strlen(resp) + 1);
+	delete[] resp;
 	return;
 }
 void __stdcall SendResponse(mg_connection *connection, const char * respMsg)
@@ -92,11 +98,10 @@ void __stdcall SendResponse(mg_connection *connection, const char * respMsg)
 	int len = strlen(respMsg);
 	char * resp = new char[len + 1];
 	strncpy(resp, respMsg, len + 1);
+	resp[len] = '\0';
 
-	mg_send_head(connection, 200, strlen(resp) + 1, "");//"Access-Control-Allow-Origin: *"
+	mg_send_head(connection, 200, (strlen(resp) + 1), "Access-Control-Allow-Origin: *\r\nContent-Type:text/plain;charset=utf-8");//"Access-Control-Allow-Origin: *"
 	mg_send(connection, resp, strlen(resp) + 1);
-
-	connection->flags |= MG_F_SEND_AND_CLOSE;
 	m_loggerInterface->info("SendData: {}", resp);
 	delete[] resp;
 }
