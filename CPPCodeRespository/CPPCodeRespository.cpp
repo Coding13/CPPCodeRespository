@@ -6,17 +6,18 @@
 #include "HttpServerMultiThread.h"
 #include "HttpClient.h"
 #include <iostream>
+#include "CPPEleven.h"
 using namespace std;
-void print(string out)
-{
-	cout << out << endl;
-}
+//void print(string out)
+//{
+//	cout << out << endl;
+//}
 int main()
 {
-	HttpServer* httpsServer = new HttpServer();
+	//HttpServer* httpsServer = new HttpServer();
 	//////HttpsTest 
-	httpsServer->init("8888");
-	httpsServer->startHttpService();
+	/*httpsServer->init("8888");
+	httpsServer->startHttpService();*/
 
 	////HttpTest
 	//httpsServer->init("8442");
@@ -30,6 +31,8 @@ int main()
 
 	//多线程测试
 	//MultiThreadStart();
+
+	int num = sumnum(333, 222);
 	system("pause");
 	return 0;
 }
