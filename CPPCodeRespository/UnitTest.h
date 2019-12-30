@@ -71,3 +71,37 @@ void LogWriterTest()
 		LogInfo("Log writter test:{}" , i);
 	}
 }
+struct LinkNode
+{
+	LinkNode *Next;
+	int value;
+};
+LinkNode * LinkReverse(LinkNode *pHead)
+{
+	LinkNode * pRevHead;
+	LinkNode * pNode = pHead;
+	LinkNode * pPre = nullptr;
+	while (pNode!=nullptr)
+	{
+		LinkNode * pNext = pNode->Next;
+		if (pNode->Next != nullptr)
+			pRevHead = pNode->Next;
+		pNode->Next = pPre;
+		pPre = pNode;
+		pNode = pNext;
+	}
+	return pRevHead;
+}
+void TestReverse()
+{
+	LinkNode * link = new LinkNode;
+	LinkNode * head = link;
+	for (int i = 1; i < 10; i++)
+	{
+		link->value = i;
+		link->Next = new LinkNode;
+		link = link->Next;
+	}
+	link->Next = nullptr;
+	LinkNode* rev = LinkReverse(head);
+}
