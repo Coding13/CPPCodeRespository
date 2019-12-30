@@ -176,7 +176,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Base64.h" />
+    <ClInclude Include="Base64Convert.h" />
     <ClInclude Include="CPPEleven.h" />
+    <ClInclude Include="CPPSingleton.h" />
     <ClInclude Include="HttpClient.h" />
     <ClInclude Include="HttpInterfaces.h" />
     <ClInclude Include="HttpServerMultiThread.h" />
@@ -186,6 +189,7 @@
     <ClInclude Include="RightRefString.h" />
     <ClInclude Include="tinyxml2.h" />
     <ClInclude Include="TinyXmlSerializable.h" />
+    <ClInclude Include="UnitTest.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
