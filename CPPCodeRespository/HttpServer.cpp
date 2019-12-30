@@ -13,12 +13,10 @@
 namespace spd = spdlog;
 //静态变量需要在使用前定义 否则lnk2001
 std::unordered_map<std::string, ReqHandler> HttpServer::s_handler_map;
-auto m_logger = spd::daily_logger_mt("HttpServer", "logs/Http.log", 0, 0);
 mg_mgr HttpServer::mgr;
 void HttpServer::init(const std::string port)
 {
 	m_port = port;
-	m_logger->flush_on(spd::level::info);
 }
 void HttpServer::startHttpService(std::string certName,std::string keyName)
 {
@@ -32,11 +30,11 @@ void HttpServer::startHttpService(std::string certName,std::string keyName)
 	bind_opts.ssl_key = keyName.c_str();
 	bind_opts.error_string = &err;
 
-	m_logger->info("Starting Https server on port:{}, cert:{}, key:{}", m_port.c_str(), bind_opts.ssl_cert, bind_opts.ssl_key);
+	LogInfo("Starting Https server on port:{}, cert:{}, key:{}", m_port.c_str(), bind_opts.ssl_cert, bind_opts.ssl_key);
 	nc = mg_bind_opt(&mgr, m_port.c_str(), ev_handler, bind_opts);
 	if (nc == NULL) 
 	{
-		m_logger->info("Failed to create listener:{}", err);
+		LogInfo("Failed to create listener:{}", err);
 		return ;
 	}
 
@@ -60,11 +58,11 @@ void HttpServer::startHttpService()
 	memset(&bind_opts, 0, sizeof(bind_opts));
 	bind_opts.error_string = &err;
 
-	m_logger->info("Starting Http server on port:{}", m_port.c_str());
+	LogInfo("Starting Http server on port:{}", m_port.c_str());
 	nc = mg_bind_opt(&mgr, m_port.c_str(), ev_handler, bind_opts);
 	if (nc == NULL) 
 	{
-		m_logger->info("Failed to create listener:{}", err);
+		LogInfo("Failed to create listener:{}", err);
 		return ;
 	}
 
@@ -89,7 +87,7 @@ bool HttpServer::route_check(http_message *http_msg,const char *route_prefix)
 void HttpServer::HandleHttpEvent(mg_connection *connection, http_message *http_req)
 {
 	//std::string req_str = std::string(http_req->message.p, http_req->message.len);
-	//m_logger->info("got request: %s\n", req_str.c_str());
+	//LogInfo("got request: %s\n", req_str.c_str());
 
 	//// 先过滤是否已注册的函数回调
 	//std::string url = std::string(http_req->uri.p, http_req->uri.len);
@@ -137,7 +135,7 @@ void HttpServer::HandleHttpEvent(mg_connection *connection, http_message *http_r
 }
 void HttpServer::ev_handler(struct mg_connection *nc, int ev, void *p) 
 {
-	m_logger->info("ev_handler event:{}", ev);
+	LogInfo("ev_handler event:{}", ev);
 	switch (ev)
 	{
 	case MG_EV_ACCEPT:
@@ -157,13 +155,13 @@ void HttpServer::ev_handler(struct mg_connection *nc, int ev, void *p)
 
 			//请求方式 get/post
 			std::string strMethod(hm->method.p, (hm->method.p + hm->method.len));
-			m_logger->info("Method:{}", strMethod.c_str());
+			LogInfo("Method:{}", strMethod.c_str());
 			//请求体
 			std::string strbody(hm->body.p, (hm->body.p + hm->body.len));
-			m_logger->info("Body:{}", strbody.c_str());
+			LogInfo("Body:{}", strbody.c_str());
 			//请求uri
 			std::string struri(hm->uri.p, (hm->uri.p + hm->uri.len));
-			m_logger->info("Uri:{}", struri.c_str());
+			LogInfo("Uri:{}", struri.c_str());
 			if (struri == "close" || struri=="/close")
 			{
 				HttpServer::Close(mgr);
@@ -174,7 +172,7 @@ void HttpServer::ev_handler(struct mg_connection *nc, int ev, void *p)
 			{
 				std::string strKey(hm->header_names[i].p, (hm->header_names[i].p + hm->header_names[i].len));
 				std::string strValue(hm->header_values[i].p, (hm->header_values[i].p + hm->header_values[i].len));
-				m_logger->info("Header:{} {}" , strKey.c_str(), strValue.c_str());
+				LogInfo("Header:{} {}" , strKey.c_str(), strValue.c_str());
 				i++;
 			}
 			//std::string struri(hm->header_names, (hm->uri.p + hm->uri.len));
@@ -210,7 +208,7 @@ void HttpServer::SendData(mg_connection * nc, const char* sdata)
 	
 	mg_send_head(nc, 200,strlen(sdata), "Access-Control-Allow-Origin: *");
 	mg_send(nc, sdata, strlen(sdata));
-	m_logger->info("SendData: {}", sdata);
+	LogInfo("SendData: {}", sdata);
 }
 //支持跨域
 void HttpServer::SendResponse(mg_connection *connection,const char* rsp)
@@ -222,7 +220,7 @@ void HttpServer::SendResponse(mg_connection *connection,const char* rsp)
 	//发送空白字符块，结束当前响应
 	mg_send_http_chunk(connection, "", 0);
 	connection->flags |= MG_F_SEND_AND_CLOSE;
-	m_logger->info("SendResponse {}", rsp);
+	LogInfo("SendResponse {}", rsp);
 }
 bool HttpServer::Close(mg_mgr mgr)
 {

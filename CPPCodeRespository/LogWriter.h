@@ -46,12 +46,12 @@ private:
 	std::shared_ptr<spdlog::logger> nml_logger;
 };
 
-#define LTrace(msg,...) Logger::GetInstance().GetLogger()->trace(suffix(msg),__VA_ARGS__)
-#define LDebug(...) Logger::GetInstance().GetLogger()->debug(__VA_ARGS__)
-#define LInfo(...) Logger::GetInstance().GetLogger()->info(__VA_ARGS__)
-#define LWarn(...) Logger::GetInstance().GetLogger()->warn(__VA_ARGS__)
-#define LError(...) Logger::GetInstance().GetLogger()->error(__VA_ARGS__)
-#define LCritical(...) Logger::GetInstance().GetLogger()->critical(__VA_ARGS__)
+#define LogTrace(msg,...) Logger::GetInstance().GetLogger()->trace(suffix(msg),__VA_ARGS__)
+#define LogDebug(...) Logger::GetInstance().GetLogger()->debug(__VA_ARGS__)
+#define LogInfo(...) Logger::GetInstance().GetLogger()->info(__VA_ARGS__)
+#define LogWarn(...) Logger::GetInstance().GetLogger()->warn(__VA_ARGS__)
+#define LogError(...) Logger::GetInstance().GetLogger()->error(__VA_ARGS__)
+#define LogCritical(...) Logger::GetInstance().GetLogger()->critical(__VA_ARGS__)
 
 #define criticalif(b, ...)                        \
     do {                                       \

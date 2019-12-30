@@ -4,6 +4,7 @@
 #include <iostream>
 #include"HttpServer.h"
 #include"CPPEleven.h"
+#include"LogWriter.h"
 using namespace std;
 void print(string out)
 {
@@ -62,4 +63,11 @@ void base64Test()
 void CppElevenTest()
 {
 	int num = sumnum(333, 222);
+}
+void LogWriterTest()
+{
+	for (int i=0;i<900000;i++)
+	{
+		LogInfo("Log writter test:{}" , i);
+	}
 }

@@ -5,7 +5,6 @@
 int HttpClient::s_exit_flag = 0;
 ReqCallback HttpClient::s_req_callback;
 
-auto m_clientlogger = spdlog::daily_logger_mt("HttpClient", "logs/HttpClient.log", 0, 0);
 // 客户端的网络请求响应
 void HttpClient::OnHttpEvent(mg_connection *connection, int event_type, void *event_data)
 {
@@ -18,13 +17,13 @@ void HttpClient::OnHttpEvent(mg_connection *connection, int event_type, void *ev
 		connect_status = *(int *)event_data;
 		if (connect_status != 0)
 		{
-			m_clientlogger->info("Error connecting to server, error code:{}", connect_status);
+			LogInfo("Error connecting to server, error code:{}", connect_status);
 			s_exit_flag = 1;
 		}
 		break;
 	case MG_EV_HTTP_REPLY:
 	{
-		m_clientlogger->info("Got reply:{}{}", (int)hm->body.len, hm->body.p);
+		LogInfo("Got reply:{}{}", (int)hm->body.len, hm->body.p);
 		std::string rsp = std::string(hm->body.p, hm->body.len);
 		connection->flags |= MG_F_SEND_AND_CLOSE;
 		s_exit_flag = 1; // 每次收到请求后关闭本次连接，重置标记
@@ -36,7 +35,7 @@ void HttpClient::OnHttpEvent(mg_connection *connection, int event_type, void *ev
 	case MG_EV_CLOSE:
 		if (s_exit_flag == 0)
 		{
-			m_clientlogger->info("Server closed connection");
+			LogInfo("Server closed connection");
 			s_exit_flag = 1;
 		};
 		break;
@@ -57,7 +56,7 @@ void HttpClient::SendReq(const std::string &url, ReqCallback req_callback, const
 	auto connection = mg_connect_http(&mgr, OnHttpEvent, url.c_str(), headers.c_str(), post_data.c_str());
 	mg_set_protocol_http_websocket(connection);
 
-	m_clientlogger->info("Send http request {}", url.c_str());
+	LogInfo("Send http request {}", url.c_str());
 
 	while (s_exit_flag == 0)
 		mg_mgr_poll(&mgr, 1000);

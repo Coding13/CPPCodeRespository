@@ -2,7 +2,8 @@
 #include "UnitTest.h"
 int main()
 {
-	HttpCientTest();
+	LogInfo("Main test");
+	LogWriterTest();
 	system("pause");
 	return 0;
 }
