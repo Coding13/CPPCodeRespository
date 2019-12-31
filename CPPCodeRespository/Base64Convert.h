@@ -1,5 +1,5 @@
 #pragma once
-#include "base64.h"
+//#include "base64.h"
 #include <iostream>
 /*
 		·½·¨Ò»

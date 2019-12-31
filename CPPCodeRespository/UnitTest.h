@@ -47,7 +47,7 @@ void HttpServerTest()
 	HttpServer* httpsServer = new HttpServer();
 	//HttpsTest 
 	httpsServer->init("8888");
-	httpsServer->startHttpService();
+	httpsServer->startHttpService("server.pem","server.key");
 	delete httpsServer;
 
 	//∂‡œﬂ≥Ã≤‚ ‘
