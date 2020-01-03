@@ -83,56 +83,7 @@ bool HttpServer::route_check(http_message *http_msg,const char *route_prefix)
 	else
 		return false;
 }
-//web server
-void HttpServer::HandleHttpEvent(mg_connection *connection, http_message *http_req)
-{
-	//std::string req_str = std::string(http_req->message.p, http_req->message.len);
-	//LogInfo("got request: %s\n", req_str.c_str());
 
-	//// 先过滤是否已注册的函数回调
-	//std::string url = std::string(http_req->uri.p, http_req->uri.len);
-	//std::string body = std::string(http_req->body.p, http_req->body.len);
-	//auto it = s_handler_map.find(url);
-	//if (it != s_handler_map.end())
-	//{
-	//	ReqHandler handle_func = it->second;
-	//	handle_func(url, body, connection, SendData);
-	//}
-
-	//// 其他请求
-	//if (route_check(http_req, "/"))
-	//{
-	//	static mg_serve_http_opts s_server_option;
-	//	mg_serve_http(connection, http_req, s_server_option);
-	//}
-	//else if (route_check(http_req, "/api/hello"))
-	//{
-	//	// 直接回传
-	//	SendData(connection, "welcome to httpserver");
-	//}
-	//else if (route_check(http_req, "/api/sum"))
-	//{
-	//	// 简单post请求，加法运算测试
-	//	char n1[100], n2[100];
-	//	double result;
-
-	//	/* Get form variables */
-	//	mg_get_http_var(&http_req->body, "n1", n1, sizeof(n1));
-	//	mg_get_http_var(&http_req->body, "n2", n2, sizeof(n2));
-
-	//	/* Compute the result and send it back as a JSON object */
-	//	result = strtod(n1, NULL) + strtod(n2, NULL);
-	//	SendData(connection, std::to_string(result));
-	//}
-	//else
-	//{
-	//	mg_printf(
-	//		connection,
-	//		"%s",
-	//		"HTTP/1.1 501 Not Implemented\r\n"
-	//		"Content-Length: 0\r\n\r\n");
-	//}
-}
 void HttpServer::ev_handler(struct mg_connection *nc, int ev, void *p) 
 {
 	LogInfo("ev_handler event:{}", ev);

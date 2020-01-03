@@ -34,7 +34,6 @@ private:
 	void RemoveHandler(const std::string &url); 
 	//路径判断 uri解析
 	static bool route_check(http_message *http_msg, const char *route_prefix);
-	static void HandleHttpEvent(mg_connection *connection, http_message *http_req);
 	static void ev_handler(struct mg_connection *nc, int ev, void *p);
 	//发送数据
 	static void SendData(mg_connection * nc,const char* sdata);
