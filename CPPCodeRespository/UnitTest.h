@@ -5,6 +5,7 @@
 #include"HttpServer.h"
 #include"CPPEleven.h"
 #include"LogWriter.h"
+#include"WinIocpBase.h"
 using namespace std;
 void print(string out)
 {
@@ -104,4 +105,40 @@ void TestReverse()
 	}
 	link->Next = nullptr;
 	LinkNode* rev = LinkReverse(head);
+}
+int IOCPTest()
+{
+	CIOCPServer* pServer = new CIOCPServer;
+
+	// 开启服务
+	if (pServer->Start())
+	{
+		SYSTEMTIME sys;
+		GetLocalTime(&sys);
+		printf("%4d-%02d-%02d %02d:%02d:%02d.%03d：Server start succussed on port:%d... \n", sys.wYear, sys.wMonth, sys.wDay, sys.wHour, sys.wMinute, sys.wSecond, sys.wMilliseconds, pServer->GetPort());
+	}
+	else
+	{
+		SYSTEMTIME sys;
+		GetLocalTime(&sys);
+		printf("%4d-%02d-%02d %02d:%02d:%02d.%03d：Server start failed！\n", sys.wYear, sys.wMonth, sys.wDay, sys.wHour, sys.wMinute, sys.wSecond, sys.wMilliseconds);
+		return 0;
+	}
+
+	// 创建事件对象，让ServerShutdown程序能够关闭自己
+	HANDLE hEvent = ::CreateEvent(NULL, FALSE, FALSE, L"ShutdownEvent");
+	if (hEvent) 
+	{
+		::WaitForSingleObject(hEvent, INFINITE);
+		::CloseHandle(hEvent);
+	}
+
+	// 关闭服务
+	pServer->Stop();
+	delete pServer;
+
+	SYSTEMTIME sys;
+	GetLocalTime(&sys);
+	printf("%4d-%02d-%02d %02d:%02d:%02d.%03d：Server Closed \n", sys.wYear, sys.wMonth, sys.wDay, sys.wHour, sys.wMinute, sys.wSecond, sys.wMilliseconds);
+	return 0;
 }

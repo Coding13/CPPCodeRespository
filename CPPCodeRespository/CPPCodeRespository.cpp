@@ -6,6 +6,7 @@ int main()
 {
 	SetUnhandledExceptionFilter(UnhandledExceptionProc);
 	LogInfo("Main test");
+	IOCPTest();
 	system("pause");
 	return 0;
 }
