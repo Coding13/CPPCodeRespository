@@ -166,32 +166,31 @@ void TestLinkNode()
 	LinkNode * temp= SingleLinkReverse(link);
 	std::cout << std::endl;
 }
-char* mystrcpy(const char* strsrc, char* strdst)
+char* mystrcpy(char* dst, const char* src)
 {
-	assert(strsrc != nullptr);
-	assert(strdst != nullptr);
-	char* strtemp = strdst;
-	while ((*strtemp++ = *strsrc++) != '\0')
-		*strtemp = '\0';
-	return strtemp;
-}
-char* mystrcpy(const char* strsrc, char* strdst)
-{
-	assert(strsrc != nullptr);
-	assert(strdst != nullptr);
-	int len = strlen(strsrc);
-	if (strsrc + len < strdst || strdst + len < strsrc)
+	assert(dst != NULL);
+	assert(src != NULL);
+
+	if (dst == src)
+		return dst;
+
+	int size = strlen(src) + 1;
+
+	if ((dst  < src) || (src + size < dst))
 	{
-		while (len--)
-			*strdst++ = *strsrc++;
-		return strdst;
+		char* d = dst;
+		const char* s = src;
+
+		while (size--)
+			*d++ = *s++;
 	}
 	else
 	{
-		char* dst = strdst + len;
-		const char* src = strsrc + len;
-		while (len--)
-			*dst++ = *src++;
-		return dst;
+		char* d = dst + size - 1;
+		const char* s = src + size - 1;
+
+		while (size--)
+			*d-- = *s--;
 	}
+	return dst;
 }
