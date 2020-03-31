@@ -194,3 +194,18 @@ char* mystrcpy(char* dst, const char* src)
 	}
 	return dst;
 }
+void MySort(int arr[], int num)
+{
+	for (int i = 0; i < num; i++)
+	{
+		for (int j = 0; j < num; j++)
+		{
+			if (arr[j] > arr[j + 1])
+			{
+				int temp = arr[j];
+				arr[j] = arr[j + 1];
+				arr[j + 1] = arr[j];
+			}
+		}
+	}
+}
