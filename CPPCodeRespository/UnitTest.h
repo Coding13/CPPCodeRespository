@@ -86,7 +86,7 @@ LinkNode * LinkReverse(LinkNode *pHead)
 	{
 		LinkNode * pNext = pNode->Next;
 		if (pNode->Next != nullptr)
-			pRevHead = pNode->Next;
+			pRevHead = pNode;
 		pNode->Next = pPre;
 		pPre = pNode;
 		pNode = pNext;
